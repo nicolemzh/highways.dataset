@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DatasetTable from '../components/dataset_table';
 import { Link } from 'react-router-dom';
-import axios from 'axios'
 import Papa from 'papaparse';
 
 // function Downloads() {
@@ -50,10 +49,10 @@ import Papa from 'papaparse';
       const newDatasets = datasetNames.map((datasetName) => ({
         id: datasetName,
         name: datasetName,
-        preprocessed: `/data/${datasetName}/${datasetName}_preprocessed.csv`,
-        wave: `/data/${datasetName}/${datasetName}_waves.csv`,
-        time_velocity_graph: `/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
-        time_acceleration_graph: `/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
+        preprocessed: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_preprocessed.csv`,
+        wave: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_waves.csv`,
+        time_velocity_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
+        time_acceleration_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
       }));
       setDatasets(newDatasets);
     };

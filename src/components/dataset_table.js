@@ -403,7 +403,7 @@ function DatasetTable({ datasets }) {
   useEffect(() => {
     datasets.forEach((dataset) => {
       const fetchData = (fileKey, fileName) => {
-        fetch(`/data/${dataset.id}/${fileName}`)
+        fetch(`${process.env.PUBLIC_URL}/data/${dataset.id}/${fileName}`)
           .then((response) => response.text())
           .then((csvText) => {
             const parsedData = Papa.parse(csvText, { header: true }).data;
@@ -501,7 +501,7 @@ function DatasetTable({ datasets }) {
               <td>{dataset.name}</td>
 
               <td style={{ width: '400px' }}>
-                <a href={`/data/${dataset.id}/${dataset.id}_preprocessed.csv`} download>
+                <a href={`${process.env.PUBLIC_URL}/data/${dataset.id}/${dataset.id}_preprocessed.csv`} download>
                   Download Preprocessed Data
                 </a>
                 <div style={{ height: '200px', marginTop: '10px' }}>
@@ -534,7 +534,7 @@ function DatasetTable({ datasets }) {
               </td>
 
               <td style={{ width: '400px' }}>
-                <a href={`/data/${dataset.id}/${dataset.id}_waves.csv`} download>
+                <a href={`${process.env.PUBLIC_URL}/data/${dataset.id}/${dataset.id}_waves.csv`} download>
                   Download Wave Data
                 </a>
                 <div style={{ height: '200px', marginTop: '10px' }}>
@@ -572,7 +572,7 @@ function DatasetTable({ datasets }) {
               <td>
                 {dataset.time_velocity_graph && (
                   <img
-                    src={dataset.time_velocity_graph}
+                    src={`${process.env.PUBLIC_URL}/data/${dataset.id}/${dataset.id}_time_velocity_graph.png`}
                     alt={`${dataset.name} Velocity Graph`}
                     style={{ width: '250px', cursor: 'pointer' }}
                     onClick={() => handleImageClick(dataset.time_velocity_graph)}
@@ -580,7 +580,7 @@ function DatasetTable({ datasets }) {
                 )}
                 {dataset.time_acceleration_graph && (
                   <img
-                    src={dataset.time_acceleration_graph}
+                    src={`${process.env.PUBLIC_URL}/data/${dataset.id}/${dataset.id}_time_acceleration_graph.png`}
                     alt={`${dataset.name} Acceleration Graph`}
                     style={{ width: '250px', cursor: 'pointer' }}
                     onClick={() => handleImageClick(dataset.time_acceleration_graph)}

@@ -118,7 +118,7 @@ import Papa from 'papaparse';
 
       <DatasetTable datasets={datasets} />
       <div style={{ textAlign: 'center', marginBottom: '10px' }} > Return to the Home Page by clicking on the button below. 
-        <Link to="/">
+        <Link to="https://nicolemzh.github.io/highways.dataset/">
         <button>Go to Introduction</button>
       </Link>
       </div>

@@ -42,7 +42,6 @@ function Introduction() {
   <strong>Wave Data:</strong> Includes detected stop-and-go waves calculated using a unique oscillation detection algorithm. These datasets also include additional
       columns in their schema detailing more information about how they are calculated:
 
-      {/* <ol style={{ listStyleType: 'decimal', marginLeft: '20px', lineHeight: '1.8' }}> */}
         <ul style={{ listStyleType: 'circle', marginLeft: '20px', lineHeight: '1.8' }}>
           <li><strong>acc_change</strong> rolling change in absolute acceleration defined by a lookback parameter (default last 10 records)</li>
           <li><strong>vel_change</strong> rolling change in velocity defined by a lookback parameter (default last 10 records)</li>

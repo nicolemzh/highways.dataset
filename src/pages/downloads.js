@@ -3,43 +3,12 @@ import DatasetTable from '../components/dataset_table';
 import { Link } from 'react-router-dom';
 import Papa from 'papaparse';
 
-// function Downloads() {
-//   const [datasets, setDatasets] = useState([]);
-
-//   useEffect(() => {
-//     fetch('http://localhost:5001/api/datasets')
-//       .then((res) => {
-//         if (!res.ok) {
-//           throw new Error(`HTTP error! status: ${res.status}`);
-//         }
-//         return res.json();
-//       })
-//       .then((data) => {
-//         console.log("Datasets fetched:", data);
-//         setDatasets(data);
-//       })
-//       .catch((err) => {
-//         console.error("Error fetching datasets:", err);
-//       });
-  // }, []);  
-
-  // useEffect(() => {
-  //   axios
-  //     .get('/datasets.json')
-  //     .then((response) => {
-  //       setDatasets(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching datasets:', error);
-  //     });
-  // }, []);
-
   function Downloads() {
   const [datasets, setDatasets] = useState([]);
   const [waveData, setWaveData] = useState({});
   const [preprocessedData, setPreprocessedData] = useState({});
 
-  // Fetch datasets from public/data folder
+  // fetch from datasets folder
   useEffect(() => {
     const fetchDatasets = () => {
       const datasetNames = [
@@ -60,13 +29,12 @@ import Papa from 'papaparse';
     fetchDatasets();
   }, []);
 
-  // Fetch and parse CSV data
   useEffect(() => {
     datasets.forEach((dataset) => {
-      // Fetch wave data
+      // fetch wave data
       if (dataset.wave) {
         fetch(dataset.wave)
-          .then((response) => response.text()) // Get raw CSV text
+          .then((response) => response.text()) // raw csv text
           .then((csvText) => {
             const parsedData = Papa.parse(csvText, { header: true });
             setWaveData((prevData) => ({
@@ -79,10 +47,10 @@ import Papa from 'papaparse';
           });
       }
 
-      // Fetch preprocessed data
+      // fetch preprocessed data
       if (dataset.preprocessed) {
         fetch(dataset.preprocessed)
-          .then((response) => response.text()) // Get raw CSV text
+          .then((response) => response.text()) // raw csv text
           .then((csvText) => {
             const parsedData = Papa.parse(csvText, { header: true });
             setPreprocessedData((prevData) => ({

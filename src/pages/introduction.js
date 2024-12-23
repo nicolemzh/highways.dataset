@@ -58,7 +58,7 @@ function Introduction() {
         Access all datasets and visualizations by clicking on the button below.
       </p>
 
-      <Link to="https://nicolemzh.github.io/highways.dataset/downloads">
+      <Link to="/downloads">
         <button style={{ display: 'block', margin: '20px auto', padding: '10px 20px', fontSize: '16px',  border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
           Go to Downloads
         </button>

@@ -6,14 +6,12 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <div className="App">
-        <Routes>
-          <Route path="" element={<Introduction />} />
-          <Route path="/downloads" element={<Downloads />} />
-        </Routes>
+          <Link to="/" element={<Introduction />} />
+          <Link to="/downloads" element={<Downloads />} />
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

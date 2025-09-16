@@ -14,7 +14,10 @@ import Papa from 'papaparse';
       const datasetNames = [
         '2024-05-12-19-35-48', '2024-05-15-17-17-41', '2024-05-29-15-13-06', '2024-06-04-10-46-38', '2024-06-05-20-01-41', 
         '2024-07-03-16-49-35', '2024-07-05-19-58-42', '2024-07-05-20-21-22', '2024-07-11-15-12-35', '2024-07-12-14-40-12', 
-        '2024-08-22-14-35-44', '2024-08-25-15-02-08', '2024-09-20-13-00-40', '2024-09-20-21-02-37']; // List dataset names in public/data folder
+        '2024-08-22-14-35-44', '2024-08-25-15-02-08', '2024-09-20-13-00-40', '2024-09-20-21-02-37', '2025-06-16-18-03-44',
+        '2025-06-24-19-20-01', '2025-06-27-17-12-53', '2025-07-01-19-18-52'
+      ]; // List dataset names in public/data folder
+      
       const newDatasets = datasetNames.map((datasetName) => ({
         id: datasetName,
         name: datasetName,
@@ -23,6 +26,7 @@ import Papa from 'papaparse';
         time_velocity_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
         time_acceleration_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
       }));
+
       setDatasets(newDatasets);
     };
 

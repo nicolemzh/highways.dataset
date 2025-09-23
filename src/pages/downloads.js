@@ -7,7 +7,7 @@ function Downloads() {
   const [datasets, setDatasets] = useState([]);
   const [waveData, setWaveData] = useState({});
   const [preprocessedData, setPreprocessedData] = useState({});
-  const [yearFilter, setYearFilter] = useState('all'); // 'all' | '2024' | '2025'
+  const [yearFilter, setYearFilter] = useState('2025'); // 'all' | '2024' | '2025'
 
   // fetch from datasets folder
   useEffect(() => {
@@ -24,12 +24,11 @@ function Downloads() {
         
         // 2025
         // without gps
-        '2025-06-16-17-33-29', '2025-06-26-07-12-40', '2025-07-01-19-49-15', '2025-07-01-19-49-30', '2025-07-01-19-50-01', 
-        '2025-07-01-19-51-48', '2025-07-22-06-48-15', '2025-08-06-07-41-53', 
+        '2025-07-01-19-49-15', '2025-07-01-19-49-30', '2025-07-01-19-50-01', '2025-07-01-19-50-22', '2025-07-01-19-51-48', 
+        '2025-07-17-06-50-19', '2025-07-22-06-48-15', '2025-08-06-07-41-08', '2025-08-06-07-41-53', 
 
         // with gps
-        '2025-06-16-18-03-44',
-        '2025-06-24-19-20-01', '2025-06-27-17-12-53', '2025-07-01-19-18-52', 
+        '2025-06-16-18-03-44', '2025-06-24-19-20-01', '2025-06-27-17-12-53', '2025-07-01-19-18-52', 
       ]; // List dataset names in public/data folder
       
       const newDatasets = datasetNames.map((datasetName) => ({
@@ -125,10 +124,10 @@ function Downloads() {
       {/* Filter buttons */}
       <div className="year-buttons">
         <button
-          className={`year-button ${yearFilter === 'all' ? 'active' : ''}`}
-          onClick={() => setYearFilter('all')}
+          className={`year-button ${yearFilter === '2025' ? 'active' : ''}`}
+          onClick={() => setYearFilter('2025')}
         >
-          All
+          2025
         </button>
         <button
           className={`year-button ${yearFilter === '2024' ? 'active' : ''}`}
@@ -137,10 +136,10 @@ function Downloads() {
           2024
         </button>
         <button
-          className={`year-button ${yearFilter === '2025' ? 'active' : ''}`}
-          onClick={() => setYearFilter('2025')}
+          className={`year-button ${yearFilter === 'all' ? 'active' : ''}`}
+          onClick={() => setYearFilter('all')}
         >
-          2025
+          All
         </button>
       </div>
 

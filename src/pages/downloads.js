@@ -1,21 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import DatasetTable from '../components/dataset_table';
 import { Link } from 'react-router-dom';
 import Papa from 'papaparse';
 
-  function Downloads() {
+function Downloads() {
   const [datasets, setDatasets] = useState([]);
   const [waveData, setWaveData] = useState({});
   const [preprocessedData, setPreprocessedData] = useState({});
+  const [yearFilter, setYearFilter] = useState('all'); // 'all' | '2024' | '2025'
 
   // fetch from datasets folder
   useEffect(() => {
     const fetchDatasets = () => {
       const datasetNames = [
+        // 2024
+        // without gps
         '2024-05-12-19-35-48', '2024-05-15-17-17-41', '2024-05-29-15-13-06', '2024-06-04-10-46-38', '2024-06-05-20-01-41', 
-        '2024-07-03-16-49-35', '2024-07-05-19-58-42', '2024-07-05-20-21-22', '2024-07-11-15-12-35', '2024-07-12-14-40-12', 
-        '2024-08-22-14-35-44', '2024-08-25-15-02-08', '2024-09-20-13-00-40', '2024-09-20-21-02-37', '2025-06-16-18-03-44',
-        '2025-06-24-19-20-01', '2025-06-27-17-12-53', '2025-07-01-19-18-52'
+        '2024-07-03-16-49-35', '2024-07-05-19-58-42', 
+        
+        // with gps
+        '2024-07-05-20-21-22', '2024-07-11-15-12-35', '2024-07-12-14-40-12', '2024-08-22-14-35-44', '2024-08-25-15-02-08', 
+        '2024-09-20-13-00-40', '2024-09-20-21-02-37', 
+        
+        // 2025
+        // without gps
+        '2025-06-16-17-33-29', '2025-06-26-07-12-40', '2025-07-01-19-49-15', '2025-07-01-19-49-30', '2025-07-01-19-50-01', 
+        '2025-07-01-19-51-48', '2025-07-22-06-48-15', '2025-08-06-07-41-53', 
+
+        // with gps
+        '2025-06-16-18-03-44',
+        '2025-06-24-19-20-01', '2025-06-27-17-12-53', '2025-07-01-19-18-52', 
       ]; // List dataset names in public/data folder
       
       const newDatasets = datasetNames.map((datasetName) => ({
@@ -69,8 +83,29 @@ import Papa from 'papaparse';
     });
   }, [datasets]);
 
+  const filteredDatasets = useMemo(() => {
+    if (yearFilter === 'all') return datasets;
+    return datasets.filter((d) => d.id.startsWith(yearFilter));
+  }, [datasets, yearFilter]);
+
+  const tabBtn = (active) => ({
+    padding: '6px 12px',
+    borderRadius: '999px',
+    border: '1px solid #e5e7eb',
+    background: active ? '#ffffff' : '#f3f4f6',
+    fontWeight: 600,
+    cursor: 'pointer',
+  });
+
   return (
     <div className="downloads">
+      <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '10px' }} >
+        <Link to="/">
+        <button>Go to Introduction</button>
+      </Link>
+      </div>
+
+      {/* Intro */}
       <h1>Downloads Page</h1>
       <div style={{ margin: '0 auto', maxWidth: '1300px', textAlign: 'left', lineHeight: '1.6', color: '#555', fontSize: '16px' }}>
         <div style={{ textAlign: 'center', marginBottom: '10px' }}>
@@ -87,7 +122,32 @@ import Papa from 'papaparse';
         </p>
       </div>
 
-      <DatasetTable datasets={datasets} />
+      {/* Filter buttons */}
+      <div className="year-buttons">
+        <button
+          className={`year-button ${yearFilter === 'all' ? 'active' : ''}`}
+          onClick={() => setYearFilter('all')}
+        >
+          All
+        </button>
+        <button
+          className={`year-button ${yearFilter === '2024' ? 'active' : ''}`}
+          onClick={() => setYearFilter('2024')}
+        >
+          2024
+        </button>
+        <button
+          className={`year-button ${yearFilter === '2025' ? 'active' : ''}`}
+          onClick={() => setYearFilter('2025')}
+        >
+          2025
+        </button>
+      </div>
+
+
+      {/* pass the filtered list into the unchanged table */}
+      <DatasetTable datasets={filteredDatasets} />
+
       <div style={{ textAlign: 'center', marginBottom: '10px' }} > Return to the Home Page by clicking on the button below. 
         <Link to="/">
         <button>Go to Introduction</button>

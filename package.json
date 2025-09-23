@@ -45,5 +45,9 @@
   "devDependencies": {
     "gh-pages": "^6.2.0"
   },
-  "homepage": "https://www.ocf.berkeley.edu/~nicolehan"
+  "homepage": "https://nicolemzh.github.io/highways.dataset",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nicolemzh/highways.dataset.git"
+  }
 }

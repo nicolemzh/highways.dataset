@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -8,10 +8,14 @@ function DatasetTable({ datasets }) {
   const [mapPoints, setMapPoints] = useState({});
   const [selectedImage, setSelectedImage] = useState(null);
 
-  datasets.sort((a, b) => b.id.localeCompare(a.id));
+  // MINIMAL CHANGE: don't mutate props; sort a copy newest-first
+  const sortedDatasets = useMemo(
+    () => [...datasets].sort((a, b) => b.id.localeCompare(a.id)),
+    [datasets]
+  );
 
   useEffect(() => {
-    datasets.forEach((dataset) => {
+    sortedDatasets.forEach((dataset) => {
       const fetchData = (fileKey, fileName) => {
         fetch(`${process.env.PUBLIC_URL}/data/${dataset.id}/${fileName}`)
           .then((response) => response.text())
@@ -45,7 +49,7 @@ function DatasetTable({ datasets }) {
         fetchData('wave', `${dataset.id}_waves.csv`);
       }
     });
-  }, [datasets]);
+  }, [sortedDatasets]);
 
   const createCustomIcon = (color) =>
     new L.Icon({
@@ -108,7 +112,8 @@ function DatasetTable({ datasets }) {
           </tr>
         </thead>
         <tbody>
-          {datasets.map((dataset) => (
+          {/* MINIMAL CHANGE: render the sorted copy */}
+          {sortedDatasets.map((dataset) => (
             <tr key={dataset.id}>
               <td>{dataset.name}</td>
 
@@ -127,21 +132,21 @@ function DatasetTable({ datasets }) {
                     >
                       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                       {mapPoints[dataset.id].preprocessed
-                      .filter((_, index) => index % 50 === 0) // graphs every 50th point
-                      .map((point, index) => (
-                        <Marker
-                          key={index}
-                          position={[point.lat, point.long]}
-                          icon={createCustomIcon('blue')}
-                        >
-                          <Popup>
-                            Lat: {point.lat}, Long: {point.long}
-                          </Popup>
-                        </Marker>
-                      ))}
+                        .filter((_, index) => index % 50 === 0) // graphs every 50th point
+                        .map((point, index) => (
+                          <Marker
+                            key={index}
+                            position={[point.lat, point.long]}
+                            icon={createCustomIcon('blue')}
+                          >
+                            <Popup>
+                              Lat: {point.lat}, Long: {point.long}
+                            </Popup>
+                          </Marker>
+                        ))}
                     </MapContainer>
                   ) : (
-                    <p>No preprocessed data available</p>
+                    <p>No preprocessed GPS data available</p>
                   )}
                 </div>
               </td>
@@ -178,7 +183,7 @@ function DatasetTable({ datasets }) {
                         })}
                     </MapContainer>
                   ) : (
-                    <p>No wave data available</p>
+                    <p>No wave GPS data available</p>
                   )}
                 </div>
               </td>

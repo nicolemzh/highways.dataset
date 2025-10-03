@@ -36,8 +36,9 @@ function Downloads() {
       const newDatasets = datasetNames.map((datasetName) => ({
         id: datasetName,
         name: datasetName,
-        preprocessed: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_preprocessed.csv`,
-        wave: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_waves.csv`,
+        // Kept for consistency, actual path construction is in DatasetTable.js
+        preprocessedBase: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_preprocessed.csv`,
+        waveBase: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_waves.csv`,
         time_velocity_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
         time_acceleration_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
       }));
@@ -47,42 +48,6 @@ function Downloads() {
 
     fetchDatasets();
   }, []);
-
-  useEffect(() => {
-    datasets.forEach((dataset) => {
-      // fetch wave data
-      if (dataset.wave) {
-        fetch(dataset.wave)
-          .then((response) => response.text()) // raw csv text
-          .then((csvText) => {
-            const parsedData = Papa.parse(csvText, { header: true });
-            setWaveData((prevData) => ({
-              ...prevData,
-              [dataset.id]: parsedData.data,
-            }));
-          })
-          .catch((error) => {
-            console.error('Error fetching wave data for dataset:', error);
-          });
-      }
-
-      // fetch preprocessed data
-      if (dataset.preprocessed) {
-        fetch(dataset.preprocessed)
-          .then((response) => response.text()) // raw csv text
-          .then((csvText) => {
-            const parsedData = Papa.parse(csvText, { header: true });
-            setPreprocessedData((prevData) => ({
-              ...prevData,
-              [dataset.id]: parsedData.data,
-            }));
-          })
-          .catch((error) => {
-            console.error('Error fetching preprocessed data for dataset:', error);
-          });
-      }
-    });
-  }, [datasets]);
 
   const filteredDatasets = useMemo(() => {
     if (yearFilter === 'all') return datasets;
@@ -113,7 +78,7 @@ function Downloads() {
           ‼️ Dataset names follow the format <code>yyyy-mm-dd-hh-mm-ss</code>, indicating the date and time the ROS device was turned on.
         </div>
         <p>
-          <strong>Download Links:</strong> Use the "Download Preprocessed Data" or "Download Wave Data" links for each dataset to save the data as a CSV.<br />
+          <strong>Download Links:</strong> Use the "Download Preprocessed Data" or "Download Wave Data" links for each dataset to save the data as a CSV. **Note that there are now two links for each file: one for the regular CSV, and one for the compressed CSV.GZ for larger files.**<br />
           <strong>Maps:</strong> Below the links are interactive maps created with Leaflet, visualizing the trajectory of each trip. The wave map uses different 
           colors to distinguish between waves.<br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⚠️ We only started collecting GPS data at the beginning on July, 2024. Some downloadable datasets 

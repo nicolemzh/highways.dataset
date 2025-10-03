@@ -3,6 +3,10 @@ import DatasetTable from '../components/dataset_table';
 import { Link } from 'react-router-dom';
 import Papa from 'papaparse';
 
+const GZ_DATASET_IDS = [
+  '2025-06-03-18-21-02', '2025-06-06-06-56-41', '2025-06-10-07-03-48', '2025-06-10-20-31-56',
+];
+
 function Downloads() {
   const [datasets, setDatasets] = useState([]);
   const [waveData, setWaveData] = useState({});
@@ -36,9 +40,8 @@ function Downloads() {
       const newDatasets = datasetNames.map((datasetName) => ({
         id: datasetName,
         name: datasetName,
-        // Kept for consistency, actual path construction is in DatasetTable.js
-        preprocessedBase: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_preprocessed.csv`,
-        waveBase: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_waves.csv`,
+        preprocessed: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_preprocessed.csv`,
+        wave: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_waves.csv`,
         time_velocity_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
         time_acceleration_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
       }));
@@ -48,6 +51,52 @@ function Downloads() {
 
     fetchDatasets();
   }, []);
+
+  useEffect(() => {
+    datasets.forEach((dataset) => {
+      const useGz = GZ_DATASET_IDS.includes(dataset.id);
+      
+      // fetch wave data
+      if (dataset.waveBase) {
+        const waveFile = useGz 
+          ? dataset.waveBase.replace('.csv', '.csv.gz')
+          : dataset.waveBase;
+          
+        fetch(waveFile)
+          .then((response) => response.text())
+          .then((csvText) => {
+            const parsedData = Papa.parse(csvText, { header: true });
+            setWaveData((prevData) => ({
+              ...prevData,
+              [dataset.id]: parsedData.data,
+            }));
+          })
+          .catch((error) => {
+            console.error('Error fetching wave data for dataset:', error);
+          });
+      }
+
+      // fetch preprocessed data
+      if (dataset.preprocessedBase) {
+        const preprocessedFile = useGz
+          ? dataset.preprocessedBase.replace('.csv', '.csv.gz')
+          : dataset.preprocessedBase;
+          
+        fetch(preprocessedFile)
+          .then((response) => response.text())
+          .then((csvText) => {
+            const parsedData = Papa.parse(csvText, { header: true });
+            setPreprocessedData((prevData) => ({
+              ...prevData,
+              [dataset.id]: parsedData.data,
+            }));
+          })
+          .catch((error) => {
+            console.error('Error fetching preprocessed data for dataset:', error);
+          });
+      }
+    });
+  }, [datasets]);
 
   const filteredDatasets = useMemo(() => {
     if (yearFilter === 'all') return datasets;
@@ -78,7 +127,8 @@ function Downloads() {
           ‼️ Dataset names follow the format <code>yyyy-mm-dd-hh-mm-ss</code>, indicating the date and time the ROS device was turned on.
         </div>
         <p>
-          <strong>Download Links:</strong> Use the "Download Preprocessed Data" or "Download Wave Data" links for each dataset to save the data as a CSV. **Note that there are now two links for each file: one for the regular CSV, and one for the compressed CSV.GZ for larger files.**<br />
+          <strong>Download Links:</strong> Use the "Download Preprocessed Data" or "Download Wave Data" links for each dataset to save the data as a CSV. 
+          Some longer trajectories may download as &nbsp;&nbsp;&nbsp;.csv.gz, and can be uncompressed.<br />
           <strong>Maps:</strong> Below the links are interactive maps created with Leaflet, visualizing the trajectory of each trip. The wave map uses different 
           colors to distinguish between waves.<br />
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ⚠️ We only started collecting GPS data at the beginning on July, 2024. Some downloadable datasets 

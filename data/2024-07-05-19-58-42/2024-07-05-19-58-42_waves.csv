@@ -1,1 +1,3 @@
-time,lat,long,vel,acc,rel_vel,rel_pos,date_time,acc_change,vel_change,is_oscillating,is_wave,num_oscillations,wave_id
+version https://git-lfs.github.com/spec/v1
+oid sha256:704ed92b4b5c546d53099de849f4253c6e53ed3dc755a7f52c229f45571f373d
+size 118

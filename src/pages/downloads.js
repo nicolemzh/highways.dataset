@@ -17,6 +17,8 @@ function Downloads() {
   useEffect(() => {
     const fetchDatasets = () => {
       const datasetNames = [
+        // 2026
+        '2026-03-20-16-43-25',
         // 2024
         // without gps
         '2024-05-12-19-35-48', '2024-05-15-17-17-41', '2024-05-29-15-13-06', '2024-06-04-10-46-38', '2024-06-05-20-01-41', 
@@ -45,6 +47,16 @@ function Downloads() {
         time_velocity_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_velocity_graph.png`,
         time_acceleration_graph: `${process.env.PUBLIC_URL}/data/${datasetName}/${datasetName}_time_acceleration_graph.png`,
       }));
+      
+      // March 20 currently has time-series plots only.
+      const march20 = newDatasets.find(
+        (dataset) => dataset.id === '2026-03-20-16-43-25'
+      );
+
+      if (march20) {
+        march20.preprocessed = null;
+        march20.wave = null;
+      }
 
       setDatasets(newDatasets);
     };

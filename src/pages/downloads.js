@@ -141,6 +141,12 @@ function Downloads() {
       {/* Filter buttons */}
       <div className="year-buttons">
         <button
+          className={`year-button ${yearFilter === '2026' ? 'active' : ''}`}
+          onClick={() => setYearFilter('2026')}
+        >
+          2026
+        </button>
+        <button
           className={`year-button ${yearFilter === '2025' ? 'active' : ''}`}
           onClick={() => setYearFilter('2025')}
         >
